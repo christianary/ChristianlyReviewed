@@ -1,7 +1,5 @@
-cd /Users/jeremychristian/Downloads/christianly-reviewed-updated
-cat >> .gitignore <<'EOF'
 node_modules/
 .next/
 dist/
 .env
-EOF
+.DS_Store

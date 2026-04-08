@@ -9,6 +9,10 @@ import {
 
 const COL = 'reviews'
 
+function cleanReview(review: Review): Record<string, unknown> {
+  return JSON.parse(JSON.stringify(review))
+}
+
 // ── Seed Firestore dengan sample data kalau kosong ────────────────────────────
 export async function seedIfEmpty(): Promise<void> {
   const snap = await getDocs(collection(db, COL))
@@ -30,11 +34,11 @@ export async function getStoredReviews(): Promise<Review[]> {
 
 // ── Write ─────────────────────────────────────────────────────────────────────
 export async function addReview(review: Review): Promise<void> {
-  await setDoc(doc(db, COL, review.id), review)
+  await setDoc(doc(db, COL, review.id), cleanReview(review))
 }
 
 export async function updateReview(review: Review): Promise<void> {
-  await setDoc(doc(db, COL, review.id), review)
+  await setDoc(doc(db, COL, review.id), cleanReview(review))
 }
 
 export async function deleteReview(id: string): Promise<void> {
@@ -52,7 +56,7 @@ export async function importData(json: string): Promise<boolean> {
     const data = JSON.parse(json) as Review[]
     if (!Array.isArray(data)) return false
     for (const review of data) {
-      await setDoc(doc(db, COL, review.id), review)
+      await setDoc(doc(db, COL, review.id), cleanReview(review))
     }
     return true
   } catch {
